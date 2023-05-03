@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="vip.floatationdevice.dancegrade.mapper.DanceDataMapper">
+
+    <resultMap id="danceDataResultMap" type="vip.floatationdevice.dancegrade.data.DanceData">
+        <id property="id" column="id"/>
+        <result property="studentId" column="studentId"/>
+        <result property="name" column="name"/>
+        <result property="actions" column="actions"
+                typeHandler="vip.floatationdevice.dancegrade.handler.IntArrayTypeHandler"/>
+        <result property="scores" column="scores"
+                typeHandler="vip.floatationdevice.dancegrade.handler.DoubleArrayTypeHandler"/>
+        <result property="scoreAvg" column="scoreAvg"/>
+    </resultMap>
+
+    <select id="getDataCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM danceData
+    </select>
+
+    <select id="getData" resultMap="danceDataResultMap">
+        SELECT * FROM danceData WHERE id = #{id}
+    </select>
+
+    <select id="getAllData" resultType="vip.floatationdevice.dancegrade.data.DanceData">
+        SELECT * FROM danceData LIMIT #{offset}, 10
+    </select>
+
+    <select id="searchData" resultType="vip.floatationdevice.dancegrade.data.DanceData" resultMap="danceDataResultMap">
+        SELECT * FROM danceData
+        <where>
+            <if test="studentId != null">
+                studentId = #{studentId}
+            </if>
+            <if test="name != null">
+                AND name LIKE CONCAT("%", #{name}, "%")
+            </if>
+        </where>
+        LIMIT #{offset}, 10
+    </select>
+
+    <select id="searchDataCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM danceData
+        <where>
+            <if test="studentId != null">
+                studentId = #{studentId}
+            </if>
+            <if test="name != null">
+                AND name LIKE CONCAT("%", #{name}, "%")
+            </if>
+        </where>
+    </select>
+
+    <select id="hasData" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM danceData WHERE id = #{id}
+    </select>
+
+    <insert id="insertData">
+        INSERT INTO danceData (studentId, name, actions, scores, scoreAvg)
+        VALUES (
+          #{studentId},
+          #{name},
+          #{actions, typeHandler=vip.floatationdevice.dancegrade.handler.IntArrayTypeHandler},
+          #{scores, typeHandler=vip.floatationdevice.dancegrade.handler.DoubleArrayTypeHandler},
+          #{scoreAvg}
+        )
+    </insert>
+
+    <delete id="deleteData">
+        DELETE FROM danceData WHERE id = #{id}
+    </delete>
+
+</mapper>
