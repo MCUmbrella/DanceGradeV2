@@ -12,12 +12,16 @@ const footer = document.querySelector('.footer');
 let totals = 0;
 
 button.addEventListener('click', (e) => {
+    /*
     if (name.value || id.value) {
         search(0, id.value, name.value);
         footer.style.display = 'block';
     } else {
         alert("请输入姓名或学号")
     }
+    */
+    search(0, id.value, name.value);
+    footer.style.display = 'block';
 })
 
 function search(page, id, name) {
@@ -34,6 +38,13 @@ function search(page, id, name) {
         form.innerHTML = "";
         let result = res.data.data.result; // result: List<DanceData>
         console.log(result);
+        if (result.length == 0) {
+            const noDataMessage = document.createElement('h4');
+            noDataMessage.textContent = '没有数据';
+            noDataMessage.style = 'text-align: center';
+            form.appendChild(noDataMessage);
+            return;
+        }
         for (let i = 0; i < result.length; i++) {
             let dd = result[i]; // dd: DanceData
             let scoreAvgFormatted = Math.trunc(dd.scoreAvg * 1000) / 1000; // keep 3 decimal digits of scoreAvg
