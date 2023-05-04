@@ -39,10 +39,8 @@ function search(page, id, name) {
         let result = res.data.data.result; // result: List<DanceData>
         console.log(result);
         if (result.length == 0) {
-            const noDataMessage = document.createElement('h4');
-            noDataMessage.textContent = '没有数据';
-            noDataMessage.style = 'text-align: center';
-            form.appendChild(noDataMessage);
+            alert("没有数据");
+            footer.style.display = 'none';
             return;
         }
         for (let i = 0; i < result.length; i++) {
@@ -74,6 +72,7 @@ function search(page, id, name) {
             total: totals
         })
     }).catch((err) => {
+        alert("查询数据时发生错误：\n" + err);
         console.log(err);
     })
 }
