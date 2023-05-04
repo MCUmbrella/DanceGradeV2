@@ -5,7 +5,7 @@ DanceGradeV2 is the back end of an academic research project on dance grading ba
 ## DanceData
 Represents the information of a student and their dance rating.
 
-Fields:
+### Fields
 - `id: Long` - The ID of the data in the database.
 - `studentId: Long` - The student ID of the student.
 - `name: String` - The name of the student.
@@ -28,7 +28,7 @@ Fields:
 ## CommonMappedResult
 The data returned by the server after receiving an HTTP request.
 
-Fields:
+### Fields
 - `code: Integer` - The status code. Used to indicate success or failure of the operation.
 - `message: String` - Additional message of the operation.
 - `data: Object (nullable)` - The data requested by the client, or the details of an error. Can be any type.
