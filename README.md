@@ -6,8 +6,8 @@ DanceGradeV2 is the back end of an academic research project on dance grading ba
 Represents the information of a student and their dance rating.
 
 Fields:
-- `id: Integer` - The ID of the data in the database.
-- `studentId: Integer` - The student ID of the student.
+- `id: Long` - The ID of the data in the database.
+- `studentId: Long` - The student ID of the student.
 - `name: String` - The name of the student.
 - `actions: Integer[]` - The order of actions (the index of the first dance action is 0).
 - `scores: Double[]`: - The score of each dance action.
@@ -30,8 +30,8 @@ The data returned by the server after receiving an HTTP request.
 
 Fields:
 - `code: Integer` - The status code. Used to indicate success or failure of the operation.
-- `message: String` - Additional information of the operation.
-- `data: Object (nullable)` - The data requested by the client (if any). Can be any type.
+- `message: String` - Additional message of the operation.
+- `data: Object (nullable)` - The data requested by the client, or the details of an error. Can be any type.
 
 ### Example
 ```json
@@ -70,8 +70,33 @@ Fields:
 }
 ```
 
+## SearchResult
+Stores the result in a search.
+Returned as CommonMappedResult's 'data' field during search operations.
+
+### Fields
+- `result: List<DanceData>` - The paged list of DanceData objects (max 10 objects per page)
+- `total: Integer` - The total number of the data that matches the search criteria 
+
+### Example
+```json
+{
+  "result": [
+    {
+      "id": 2,
+      "studentId": 19532802,
+      "name": "Rain Silves",
+      "actions": [0, 1, 2, 3, 4],
+      "scores": [100.0 ,100.0, 100.0, 100.0, 100.0],
+      "scoreAvg": 100.0
+    }
+  ],
+  "total": 1
+}
+```
+
 # HTTP API
-Default bind: `0.0.0.0:60080`
+Default bind address: `0.0.0.0:60080`
 
 ## Read related functions
 
@@ -116,8 +141,8 @@ Response:
       "studentId": 19532802,
       "name": "Rain Silves",
       "actions": [0, 1, 2, 3, 4],
-      "scores": [100, 100, 100, 100, 100],
-      "scoreAvg": 100
+      "scores": [100.0 ,100.0, 100.0, 100.0, 100.0],
+      "scoreAvg": 100.0
     },
     {
       "id": 5,
@@ -150,17 +175,17 @@ Response:
   "code": 200,
   "message": "OK",
   "data": {
-    "total": 1,
     "result": [
       {
-        "id": 1,
+        "id": 0,
         "studentId": 19532801,
         "name": "Student Name 1",
         "actions": [0, 1, 2, 1, 2, 4, 3],
         "scores": [98.285001, 92.104919, 94.184573, 91.501711, 96.171609],
         "scoreAvg": 94.449563
       }
-    ]
+    ],
+    "total": 1
   }
 }
 ```
@@ -229,3 +254,19 @@ Response:
   "data": null
 }
 ```
+
+# Override the default config
+The default configuration doesn't meet everyone's needs. This example shows how to change the binding port to 8080, change the URL, username & password of the MySQL connection, and turn on verbose logging of MyBatis.
+1. Create a new file named `application.yml` under the working directory (usually the same location as the runnable jar file).
+2. Write these lines:
+```yml
+server:
+  port: 8080
+spring:
+  datasource:
+    url: "jdbc:mysql://node0.example.org:3306/myDatabase?user=admin&password=111111"
+mybatis:
+  configuration:
+    log-impl: "org.apache.ibatis.logging.stdout.StdOutImpl"
+```
+3. Start the program and see the results.
